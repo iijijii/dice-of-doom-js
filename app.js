@@ -11,13 +11,8 @@ $(function(){
 		this.sequence = sequence;
 	}
 
-	start();
-
-	function start(){	
-		//盤面、サイコロを配置
-		makeMasu();
-		draw();
-	}
+	makeMasu();
+	draw();
 
 	function makeMasu(){
 		for(var x=0;x<partition;x++){
