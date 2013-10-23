@@ -4,9 +4,10 @@
 	<meta charset="UTF-8">
 	<title>Dice Of Doom</title>
 	<link rel="stylesheet" href="app.css">
+	<script src="jquery-1.10.1.min.js"></script>
 	<script type="text/javascript" src="app.js"></script>
 </head>
-<body onload="start()">
+<body>
 	<div id="board"></div>
 	<div id="turn"></div>
 	<form name="form1">
@@ -15,8 +16,7 @@
 		</br>
 		<input type="radio" id="buttonX2Y1" value="x1y2" name="radiobutton">
 		<input type="radio" id="buttonX2Y2" value="x2y2" name="radiobutton">
-		<input type="button" id="submit" value="submit" onclick="attack()">
-		</br>
+		<input type="button" id="submit" value="Attack!">
 	</form>
 </body>
 </html>
