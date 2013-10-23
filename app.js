@@ -29,6 +29,7 @@ $(function(){
 	}
 
 	function drawButton(){
+		if($('#board').length > 0){$('#board').empty();}
 		for(var j=0;j<partition*partition;j++){
 		    $('#board').append(
 		    	$('<input type="button" class="buttons" value="' +turn[board[j].turn] + board[j].dices+'" id="id'+j+'">' ));
@@ -36,7 +37,6 @@ $(function(){
 	    		$('#board').append($('<br>'));
 	    	}
 		}
-
 	}
 
 	$(".buttons").click(function(){
