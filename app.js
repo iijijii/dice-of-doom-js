@@ -4,7 +4,10 @@ $(function(){
 	var maxDices = 3;
 	var board = new Array();
 	var turn = ["A","B"];
-	var attacker = turn[0];
+	//var attacker = turn[0];
+
+	//攻撃する、されるボタン情報格納
+	var buttonInfo = new Array();
 
 	var masuData = function(turn,dices,sequence){
 		this.turn=turn;
@@ -14,6 +17,7 @@ $(function(){
 
 	makeMasu();
 	draw();
+	makeButton();
 
 	function makeMasu(){
 	    for(var i=0;i<partition*partition;i++){
@@ -26,6 +30,7 @@ $(function(){
 	}
 
 	function draw(){ 
+		
 		var line='';
 	    for(var j=0;j<partition*partition;j++){
         	line += turn[board[j].turn] + board[j].dices.toString();
@@ -36,6 +41,22 @@ $(function(){
 	    document.getElementById("board").innerHTML=line;
 	    document.getElementById("turn").innerHTML="turn : "+turn;
 	}
+
+	function makeButton(){
+		for(var j=0;j<partition*partition;j++){
+		    $('#board').append(
+		    	$('<input type="button" class="buttons" value="' +turn[board[j].turn] + board[j].dices+'" id="id'+j+'">' ));
+	    	if(j%2==1){
+	    		$('#board').append($('<br>'));
+	    	}
+		}
+	}
+
+	$(".buttons").click(function(){
+		id = $(this).attr("id");
+		buttonInfo.push(id);
+		document.getElementById("buttonInfo").innerHTML=buttonInfo;
+	});
 
 	$("#submit").click(function(){
 		attack();
@@ -51,6 +72,7 @@ $(function(){
 			supply();
 		}
 		draw();
+		makeButton();
 		changeTurn();
 	}
 
