@@ -45,7 +45,7 @@ $(function(){
 	function attack(){
 
 		if(canAttack){
-			changePosition(attackX,attackY,aimX,aimY);
+			changePosition(1,2);
 		}
 		else{
 			supply();
@@ -59,7 +59,13 @@ $(function(){
 	}
 
 	//アタックした場所にサイコロを移し、自分の陣地にする
-	function changePosition(){
+	function changePosition(mySequence,yourSequence){
+		board[yourSequence].dices = board[mySequence].dices - 1;
+		board[mySequence].dices = 1;
+		var enemy = board[yourSequence].turn ;
+		if(enemy == 0){ enemy = 1;}
+		else{ enemy = 0;}
+		board[yourSequence].turn = enemy;
 	}
 
 	/////////////////////////////////////////////////////////////////
@@ -67,8 +73,8 @@ $(function(){
 	function supply(){}
 
 	function changeTurn(){
-		if(turn="A"){turn ="B"}
-		else{turn = "A"}
+		if(turn==0){turn = 1;}
+		else{turn = 0;}
 	}
 
 }); 
