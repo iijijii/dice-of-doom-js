@@ -4,7 +4,7 @@ $(function(){
 	var maxDices = 3;
 	var board = new Array();
 	var turn = ["A","B"];
-	//var attacker = turn[0];
+	var attacker;
 
 	//攻撃する、されるボタン情報格納
 	var buttonInfo = new Array();
@@ -15,8 +15,13 @@ $(function(){
 		this.sequence = sequence;
 	}
 
-	makeMasu();
-	drawButton();
+	start();
+
+	function start(){
+		attacker = turn[0];
+		makeMasu();
+		drawButton();
+	}
 
 	function makeMasu(){
 	    for(var i=0;i<partition*partition;i++){
@@ -37,11 +42,13 @@ $(function(){
 	    		$('#board').append($('<br>'));
 	    	}
 		}
+		document.getElementById("turn").innerHTML="turn : "+attacker;
 	}
 
 	$(".buttons").click(function(){
 		id = $(this).attr("id");
 		buttonInfo.push(id);
+
 	});
 
 	$("#submit").click(function(){
@@ -50,19 +57,23 @@ $(function(){
 
 	//////////////////////////////////////////////////////////////
 	function attack(){
-
+				document.getElementById("turn").innerHTML+="buttonIndo : "+buttonInfo.length;
 		var NumOfClicked = buttonInfo.length; 
-		var attackerIndex = parseInt(buttonInfo[NumOfClicked-2].substring(2,3));
-		var attackedIndex = parseInt(buttonInfo[NumOfClicked-1].substring(2.3));
+		if(NumOfClicked.length==2){
+			var attackerIndex = parseInt(buttonInfo[NumOfClicked-2].substring(2,3));
+			var attackedIndex = parseInt(buttonInfo[NumOfClicked-1].substring(2.3));
+		}else{
+			buttonInfo=new Array();
+		}
 
-		if(canAttack){
+		if(canAttack()){
 			changePosition(attackerIndex,attackedIndex);
 		}
 		else{
 			supply();
+			changeTurn();
 		}
 		drawButton();
-		changeTurn();
 	}
 
 	function canAttack(){
@@ -84,8 +95,8 @@ $(function(){
 	function supply(){}
 
 	function changeTurn(){
-		if(turn==0){turn = 1;}
-		else{turn = 0;}
+		if(attacker=="A"){attacker = "B";}
+		else{attacker = "A";}
 	}
 
 }); 
