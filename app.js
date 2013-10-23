@@ -4,6 +4,7 @@ $(function(){
 	var maxDices = 3;
 	var board = new Array();
 	var turn = ["A","B"];
+	var attacker = turn[0];
 
 	var masuData = function(turn,dices,sequence){
 		this.turn=turn;
@@ -36,6 +37,9 @@ $(function(){
 	    document.getElementById("turn").innerHTML="turn : "+turn;
 	}
 
+	$("#submit").click(function(){
+		attack();
+	})
 }); 
 
 //////////////////////////////////////////////////////////////
