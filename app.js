@@ -19,11 +19,11 @@ $(function(){
 
 	function start(){
 		attacker = turn[0];
-		makeMasu();
+		initBoard();
 		drawButton();
 	}
 
-	function makeMasu(){
+	function initBoard(){
 	    for(var i=0;i<partition*partition;i++){
 		var numberOfDices = Math.floor(Math.random() * (maxDices))+ 1;
 		var player= Math.floor(Math.random() * 2);
@@ -57,13 +57,18 @@ $(function(){
 
 	//////////////////////////////////////////////////////////////
 	function attack(){
-				document.getElementById("turn").innerHTML+="buttonIndo : "+buttonInfo.length;
+		console.log(buttonInfo.length);
 		var NumOfClicked = buttonInfo.length; 
+		var attackerIndex　= 0;
+		var attackedIndex = 0;
+
 		if(NumOfClicked.length==2){
+			//console.log(buttonInfo.length);
 			var attackerIndex = parseInt(buttonInfo[NumOfClicked-2].substring(2,3));
-			var attackedIndex = parseInt(buttonInfo[NumOfClicked-1].substring(2.3));
+			attackedIndex = parseInt(buttonInfo[NumOfClicked-1].substring(2.3));
+			console.log("a");
 		}else{
-			buttonInfo=new Array();
+			//空にする
 		}
 
 		if(canAttack()){
@@ -82,6 +87,7 @@ $(function(){
 
 	//アタックした場所にサイコロを移し、自分の陣地にする
 	function changePosition(mySequence,yourSequence){
+		console.log("a");
 		board[yourSequence].dices = board[mySequence].dices - 1;
 		board[mySequence].dices = 1;
 		var enemy = board[yourSequence].turn ;
