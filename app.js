@@ -40,34 +40,36 @@ $(function(){
 	$("#submit").click(function(){
 		attack();
 	})
+
+	//////////////////////////////////////////////////////////////
+	function attack(){
+
+		if(canAttack){
+			changePosition(attackX,attackY,aimX,aimY);
+		}
+		else{
+			supply();
+		}
+		draw();
+		changeTurn();
+	}
+
+	function canAttack(){
+		return true;
+	}
+
+	//アタックした場所にサイコロを移し、自分の陣地にする
+	function changePosition(){
+	}
+
+	/////////////////////////////////////////////////////////////////
+	//補給する。
+	function supply(){}
+
+	function changeTurn(){
+		if(turn="A"){turn ="B"}
+		else{turn = "A"}
+	}
+
 }); 
 
-//////////////////////////////////////////////////////////////
-function attack(){
-
-	if(canAttack){
-		changePosition(attackX,attackY,aimX,aimY);
-	}
-	else{
-		supply();
-	}
-	draw();
-	changeTurn();
-}
-
-function canAttack(){
-	return true;
-}
-
-//アタックした場所にサイコロを移し、自分の陣地にする
-function changePosition(){
-}
-
-/////////////////////////////////////////////////////////////////
-//補給する。
-function supply(){}
-
-function changeTurn(){
-	if(turn="A"){turn ="B"}
-	else{turn = "A"}
-}
