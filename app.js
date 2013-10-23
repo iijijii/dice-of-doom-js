@@ -1,26 +1,32 @@
-//N
-var partition = 2;
-var maxDices = 3;
-var turn = "A";
-
 $(function(){
-	start()
-}); 
-function start(){	
-	//盤面、サイコロを配置
+	//N
+	var partition = 2;
+	var maxDices = 3;
 	var board = new Array();
-	makeMasu();
-	draw();
+	var turn = ["A","B"];
 
-}
+	var masuData = function(turn,dices,sequence){
+		this.turn=turn;
+		this.dices = dices;
+		this.sequence = sequence;
+	}
 
-function makeMasu(){
-	for(var x=0;x<partition;x++){
-        board[x]=new Array();
-        for(var y=0;y<partition;y++){
-            board[x][y]= desideWhosePlace()+desideNumOfDices();
-        }
-    }
+	start();
+
+	function start(){	
+		//盤面、サイコロを配置
+		makeMasu();
+		draw();
+	}
+
+	function makeMasu(){
+		for(var x=0;x<partition;x++){
+	        board[x]=new Array();
+	        for(var y=0;y<partition;y++){
+	            board[x][y]= desideWhosePlace()+desideNumOfDices();
+	        }
+	    }
+	}
 
     //各ヘックスのサイコロの数を決める
 	function desideNumOfDices(){
@@ -34,17 +40,17 @@ function makeMasu(){
 		else{return "B";}
 	}
 
-};
+	function draw(){ 
+		var line='';
+	    for(var y=0;y<partition;y++){
+	        for(var x=0;x<partition;x++){line+=board[x][y];}
+	        line+="<br>"
+	    }        
+	    document.getElementById("board").innerHTML=line;
+	    document.getElementById("turn").innerHTML="turn : "+turn;
+	}
 
-function draw(){ 
-	var line='';
-    for(var y=0;y<partition;y++){
-        for(var x=0;x<partition;x++){line+=board[x][y];}
-        line+="<br>"
-    }        
-    document.getElementById("board").innerHTML=line;
-    document.getElementById("turn").innerHTML="turn : "+turn;
-}
+}); 
 
 //////////////////////////////////////////////////////////////
 function attack(){
