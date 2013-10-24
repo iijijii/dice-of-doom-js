@@ -1,14 +1,12 @@
 $(function(){
 	//N
 	var partition = 2;
+	var squareN = partition*partition;
 	var maxDices = 3;
 	var board = new Array();
 	var turn = ["A","B"];
 	var playerIndex = 0;
 	var player=turn[playerIndex];
-
-	//攻撃する、されるボタン情報格納
-	var buttonInfo = new Array();
 
 	var masuData = function(turn,dices,sequence){
 		this.turn=turn;
@@ -19,13 +17,14 @@ $(function(){
 	start();
 
 	function start(){
+		document.getElementById("turn").innerHTML="turn : "+player;
 		//playerIndex = 0;
 		initBoard();
 		drawButton();
 	}
 
 	function initBoard(){
-	    for(var i=0;i<partition*partition;i++){
+	    for(var i=0;i<squareN;i++){
 		var numberOfDices = Math.floor(Math.random() * (maxDices))+ 1;
 		var whosePlace= Math.floor(Math.random() * 2);		
     	var masu = new masuData(whosePlace,numberOfDices,i);
@@ -35,7 +34,7 @@ $(function(){
 
 	function drawButton(){
 		if($('#board').length > 0){$('#board').empty();}
-		for(var j=0;j<partition*partition;j++){
+		for(var j=0;j<squareN;j++){
 		    $('#board').append(
 		    	$('<input type="button" class="buttons" value="' +turn[board[j].turn] + board[j].dices+'" id="id'+j+'">' ));
 	    	if(j%2==1){
@@ -43,14 +42,65 @@ $(function(){
 	    	}
 		}
 		document.getElementById("turn").innerHTML="turn : "+player;
-		document.getElementById("buttonInfo").innerHTML="buttonInfo : "+ buttonInfo;
 	}
 
-	$(".buttons").click(function(){
-		id = $(this).attr("id");
-		buttonInfo.push(id);
-		document.getElementById("buttonInfo").innerHTML="buttonInfo : "+ buttonInfo;
+	$("#submit").click(function(){		
+		submitClicked();
 	});
+
+	function submitClicked(){
+		for(var i = 0;i<squareN;i++)
+		findPlaceForCell(i);
+		//findPlaceToAttack();
+	}
+
+	function findPlaceToAttack(){
+
+	}	
+
+
+	//ある場所にいる攻撃者がさせる場所
+	//TODO!Nが増えたとき修正
+	function findPlaceForCell(attackerIndex){
+		var indexForDirections=[(attackerIndex-partition-1),//左上
+						(attackerIndex-partition),   //上
+						(attackerIndex-1),           //左
+						(attackerIndex+1),            //右
+						(attackerIndex+partition),   //左下
+						(attackerIndex+partition+1)];//右下	
+		
+		//indexForDirectionsのインデックス格納
+		var directionsToAttack = new Array();
+		switch(attackerIndex){
+			case 0: 
+				directionsToAttack = [3,4,5];
+				break;
+			//右上端
+			case (partition - 1):
+				directionsToAttack = [2,4];
+				break;
+			//左下端
+			case (partition*(partition-1)):
+				directionsToAttack = [1,3];
+				break;
+			//右下端
+			case(squareN-1):
+				directionsToAttack = [0,1,2];	
+				break;		
+		}
+
+		var placeToAttack = new Array();//自分の位置からさせる場所のインデックス
+		for(var i=0;i<directionsToAttack.length;i++){
+			placeToAttack.push(indexForDirections[directionsToAttack[i]]);
+		}
+		document.getElementById("placeToAttack").innerHTML+="canAttackCell : "+placeToAttack +"  index"+attackerIndex;
+		return placeToAttack;
+		//上に対して敵の陣地かチェックする
+
+		//敵のサイコロの数より多いか？
+
+		//上に対して点数（取り除いたサイコロの数）が最大になるところを先頭にするように並び替え
+	}
 
 
 	//アタックした場所にサイコロを移し、自分の陣地にする
@@ -68,6 +118,5 @@ $(function(){
 		if(playerIndex == turn.length){playerIndex = 0;}
 		else{playerIndex = playerIndex + 1}
 	}
-
 }); 
 
