@@ -49,8 +49,9 @@ $(function(){
 	});
 
 	function submitClicked(){
-		for(var i = 0;i<squareN;i++)
-		findPlaceForCell(i);
+		for(var i=0;i<squareN;i++){
+			findPlaceForCell(i);
+		}
 		//findPlaceToAttack();
 	}
 
@@ -98,7 +99,7 @@ $(function(){
 		//敵の陣地かつ敵のサイコロの数より多いか？
 		var enemyToAttack = new Array();
 		for(var i=0;i<placeToAttack.length;i++){
-			if((board[placeToAttack[i]].turn != player)
+			if((board[placeToAttack[i]].turn != playerIndex)
 				&& (board[placeToAttack[i]].dices < board[attackerIndex].dices)){
 					enemyToAttack.push(placeToAttack[i]);
 			}
