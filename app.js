@@ -49,14 +49,23 @@ $(function(){
 	});
 
 	function submitClicked(){
-		for(var i=0;i<squareN;i++){
-			findPlaceForCell(i);
-		}
-		//findPlaceToAttack();
+		findPlaceToAttack();
 	}
 
 	function findPlaceToAttack(){
-
+		//させるすべての場所
+		var marks = new Array();
+		for(var i = 0;i<squareN; i++){
+			if(board[i].turn == playerIndex){
+				var placeForCell=findPlaceForCell(i);
+				for(var j = 0; j< placeForCell.length; j++){
+					if(findPlaceForCell != null){
+						marks.push(placeForCell[j]);
+					}	
+				}
+			}
+		}
+		document.getElementById("placeToAttack").innerHTML+="marks : "+marks;
 	}	
 
 
@@ -95,7 +104,6 @@ $(function(){
 			placeToAttack.push(indexForDirections[directionsToAttack[i]]);
 		}
 		
-		
 		//敵の陣地かつ敵のサイコロの数より多いか？
 		var enemyToAttack = new Array();
 		for(var i=0;i<placeToAttack.length;i++){
@@ -104,7 +112,7 @@ $(function(){
 					enemyToAttack.push(placeToAttack[i]);
 			}
 		}
-		document.getElementById("placeToAttack").innerHTML+="canAttackCell : "+enemyToAttack +"  index"+attackerIndex;
+		//document.getElementById("placeToAttack").innerHTML+="canAttackCell : "+enemyToAttack +"  index"+attackerIndex;
 		return enemyToAttack;
 		//上に対して点数（取り除いたサイコロの数）が最大になるところを先頭にするように並び替え
 	}
