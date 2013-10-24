@@ -52,37 +52,6 @@ $(function(){
 		document.getElementById("buttonInfo").innerHTML="buttonInfo : "+ buttonInfo;
 	});
 
-	$("#submit").click(function(){		
-		submitClicked();
-	});
-
-	//////////////////////////////////////////////////////////////
-	function submitClicked(){
-		var NumOfClicked = buttonInfo.length; 
-		var attackerIndex　= 0;
-		var attackedIndex = 0;
-
-		if(NumOfClicked==2){
-			attackerIndex = parseInt(buttonInfo[NumOfClicked-2].substring(2,3));
-			attackedIndex = parseInt(buttonInfo[NumOfClicked-1].substring(2.3));
-		}else{
-			buttonInfo.length = 0;			
-		}
-
-		if(canAttack()){
-			attack(attackerIndex,attackedIndex);
-		}
-		else{
-			supply();
-			changeTurn();
-		}
-		NumOfClicked = 0;
-		drawButton();
-	}
-
-	function canAttack(){
-		return true;
-	}
 
 	//アタックした場所にサイコロを移し、自分の陣地にする
 	function attack(attacker,attacked){
