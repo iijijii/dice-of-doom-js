@@ -93,15 +93,20 @@ $(function(){
 		for(var i=0;i<directionsToAttack.length;i++){
 			placeToAttack.push(indexForDirections[directionsToAttack[i]]);
 		}
-		document.getElementById("placeToAttack").innerHTML+="canAttackCell : "+placeToAttack +"  index"+attackerIndex;
-		return placeToAttack;
-		//上に対して敵の陣地かチェックする
-
-		//敵のサイコロの数より多いか？
-
+		
+		
+		//敵の陣地かつ敵のサイコロの数より多いか？
+		var enemyToAttack = new Array();
+		for(var i=0;i<placeToAttack.length;i++){
+			if((board[placeToAttack[i]].turn != player)
+				&& (board[placeToAttack[i]].dices < board[attackerIndex].dices)){
+					enemyToAttack.push(placeToAttack[i]);
+			}
+		}
+		document.getElementById("placeToAttack").innerHTML+="canAttackCell : "+enemyToAttack +"  index"+attackerIndex;
+		return enemyToAttack;
 		//上に対して点数（取り除いたサイコロの数）が最大になるところを先頭にするように並び替え
 	}
-
 
 	//アタックした場所にサイコロを移し、自分の陣地にする
 	function attack(attacker,attacked){
