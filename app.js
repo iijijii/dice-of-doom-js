@@ -4,7 +4,9 @@ $(function(){
 	var maxDices = 3;
 	var board = new Array();
 	var turn = ["A","B"];
-	var attacker;
+	var playerIndex = 0;
+	var player=turn[playerIndex];
+
 
 	//攻撃する、されるボタン情報格納
 	var buttonInfo = new Array();
@@ -18,7 +20,7 @@ $(function(){
 	start();
 
 	function start(){
-		attacker = turn[0];
+		//playerIndex = 0;
 		initBoard();
 		drawButton();
 	}
@@ -26,9 +28,9 @@ $(function(){
 	function initBoard(){
 	    for(var i=0;i<partition*partition;i++){
 		var numberOfDices = Math.floor(Math.random() * (maxDices))+ 1;
-		var player= Math.floor(Math.random() * 2);
+		var whosePlace= Math.floor(Math.random() * 2);
 		
-    	var masu = new masuData(player,numberOfDices,i);
+    	var masu = new masuData(whosePlace,numberOfDices,i);
     	board.push(masu);
     	}  
 	}
@@ -42,7 +44,7 @@ $(function(){
 	    		$('#board').append($('<br>'));
 	    	}
 		}
-		document.getElementById("turn").innerHTML="turn : "+attacker;
+		document.getElementById("turn").innerHTML="turn : "+player;
 	}
 
 	$(".buttons").click(function(){
@@ -52,27 +54,27 @@ $(function(){
 	});
 
 	$("#submit").click(function(){
-		attack();
+		document.getElementById("turn").innerHTML+="turn : "+player;
+		submitClicked();
 	});
 
 	//////////////////////////////////////////////////////////////
-	function attack(){
-		console.log(buttonInfo.length);
+	function submitClicked(){
 		var NumOfClicked = buttonInfo.length; 
 		var attackerIndex　= 0;
 		var attackedIndex = 0;
 
 		if(NumOfClicked.length==2){
-			//console.log(buttonInfo.length);
-			var attackerIndex = parseInt(buttonInfo[NumOfClicked-2].substring(2,3));
+			console.log(buttonInfo.length);
+			attackerIndex = parseInt(buttonInfo[NumOfClicked-2].substring(2,3));
 			attackedIndex = parseInt(buttonInfo[NumOfClicked-1].substring(2.3));
-			console.log("a");
+			//console.log("a");
 		}else{
 			//空にする
 		}
 
 		if(canAttack()){
-			changePosition(attackerIndex,attackedIndex);
+			attack(attackerIndex,attackedIndex);
 		}
 		else{
 			supply();
@@ -86,14 +88,11 @@ $(function(){
 	}
 
 	//アタックした場所にサイコロを移し、自分の陣地にする
-	function changePosition(mySequence,yourSequence){
+	function attack(attacker,attacked){
 		console.log("a");
-		board[yourSequence].dices = board[mySequence].dices - 1;
-		board[mySequence].dices = 1;
-		var enemy = board[yourSequence].turn ;
-		if(enemy == 0){ enemy = 1;}
-		else{ enemy = 0;}
-		board[yourSequence].turn = enemy;
+		board[attacked].dices = board[attacker].dices - 1;
+		board[attacker].dices = 1;
+		board[attacked].turn = board[attacker].turn;
 	}
 
 	/////////////////////////////////////////////////////////////////
@@ -101,8 +100,8 @@ $(function(){
 	function supply(){}
 
 	function changeTurn(){
-		if(attacker=="A"){attacker = "B";}
-		else{attacker = "A";}
+		if(playerIndex == turn.length){playerIndex = 0;}
+		else{playerIndex = playerIndex + 1}
 	}
 
 }); 
