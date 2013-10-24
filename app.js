@@ -8,10 +8,11 @@ $(function(){
 	var playerIndex = 0;
 	var player=turn[playerIndex];
 
-	var masuData = function(turn,dices,sequence){
+	var masuData = function(turn,dices,canAttackIndexes,numOfHarvests){
 		this.turn=turn;
 		this.dices = dices;
-		this.sequence = sequence;
+		this.canAttackIndexes = canAttackIndexes;
+		this.numOfHarvests = numOfHarvests;
 	}
 
 	start();
@@ -27,7 +28,7 @@ $(function(){
 	    for(var i=0;i<squareN;i++){
 		var numberOfDices = Math.floor(Math.random() * (maxDices))+ 1;
 		var whosePlace= Math.floor(Math.random() * 2);		
-    	var masu = new masuData(whosePlace,numberOfDices,i);
+    	var masu = new masuData(whosePlace,numberOfDices,new Array(),new Array());
     	board.push(masu);
     	}  
 	}
@@ -52,6 +53,7 @@ $(function(){
 		findPlaceToAttack();
 	}
 
+//TODO　attackerのインデックスとセットにするorマスにアタックできるところとその時ゲットできるサイコロの数を入れる
 	function findPlaceToAttack(){
 		//させるすべての場所
 		var marks = new Array();
@@ -67,7 +69,6 @@ $(function(){
 		}
 		document.getElementById("placeToAttack").innerHTML+="marks : "+marks;
 	}	
-
 
 	//ある場所にいる攻撃者がさせる場所
 	//TODO!Nが増えたとき修正
@@ -105,15 +106,18 @@ $(function(){
 		}
 		
 		//敵の陣地かつ敵のサイコロの数より多いか？
-		var enemyToAttack = new Array();
+		var enemyToAttack = new Array();//敵のインデックス
+		//var enemyDices = new Array();
 		for(var i=0;i<placeToAttack.length;i++){
 			if((board[placeToAttack[i]].turn != playerIndex)
 				&& (board[placeToAttack[i]].dices < board[attackerIndex].dices)){
 					enemyToAttack.push(placeToAttack[i]);
+					//enemyDices.push(board[i].numberOfDices);
 			}
 		}
-		//document.getElementById("placeToAttack").innerHTML+="canAttackCell : "+enemyToAttack +"  index"+attackerIndex;
 		return enemyToAttack;
+		//masuData[attackerIndex].canAttackIndexes=enemyToAttack;
+		//masuData[attackerIndex].numOfHarvests=enemyDices;
 		//上に対して点数（取り除いたサイコロの数）が最大になるところを先頭にするように並び替え
 	}
 
