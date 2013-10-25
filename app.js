@@ -18,18 +18,18 @@ $(function(){
 	start();
 
 	function start(){
-		document.getElementById("turn").innerHTML="turn : "+player;
 		//playerIndex = 0;
 		initBoard();
 		drawButton();
 	}
 
 	function initBoard(){
+		var array = new Array();
 	    for(var i=0;i<squareN;i++){
-		var numberOfDices = Math.floor(Math.random() * (maxDices))+ 1;
-		var whosePlace= Math.floor(Math.random() * 2);		
-    	var masu = new masuData(whosePlace,numberOfDices,new Array(),new Array());
-    	board.push(masu);
+			var numberOfDices = Math.floor(Math.random() * (maxDices))+ 1;
+			var whosePlace= Math.floor(Math.random() * 2);		
+	    	var masu = new masuData(whosePlace,numberOfDices,array,array);
+	    	board.push(masu);
     	}  
 	}
 
@@ -37,12 +37,13 @@ $(function(){
 		if($('#board').length > 0){$('#board').empty();}
 		for(var j=0;j<squareN;j++){
 		    $('#board').append(
-		    	$('<input type="button" class="buttons" value="' +turn[board[j].turn] + board[j].dices+'" id="id'+j+'">' ));
+		    	$('<input type="button" value="' +turn[board[j].turn] + board[j].dices+'" id="id'+j+'">' ));
 	    	if(j%2==1){
 	    		$('#board').append($('<br>'));
 	    	}
-		}
+    	}
 		document.getElementById("turn").innerHTML="turn : "+player;
+
 	}
 
 	$("#submit").click(function(){		
@@ -53,21 +54,25 @@ $(function(){
 		findPlaceToAttack();
 	}
 
-//TODO　attackerのインデックスとセットにするorマスにアタックできるところとその時ゲットできるサイコロの数を入れる
 	function findPlaceToAttack(){
 		//させるすべての場所
 		var marks = new Array();
 		for(var i = 0;i<squareN; i++){
 			if(board[i].turn == playerIndex){
-				var placeForCell=findPlaceForCell(i);
-				for(var j = 0; j< placeForCell.length; j++){
-					if(findPlaceForCell != null){
-						marks.push(placeForCell[j]);
-					}	
+				findPlaceForCell(i);//各味方の情報にアタックできる情報を入れる
+				while(board[i].canAttackIndexes[0]!=null){
+					var canAttack = board[i].canAttackIndexes.pop();
+					if($.inArray(canAttack, marks)<0){
+						marks.push(canAttack);
+					}
 				}
 			}
 		}
-		document.getElementById("placeToAttack").innerHTML+="marks : "+marks;
+		document.getElementById("placeToAttack").innerHTML = "canAttackPlace : "+ marks;
+		for(var i=0;i<marks.length;i++){
+			$('#buttons').append(
+		    		$('<input type="button" class="buttons" value="' +marks[i]+'" id="id'+i+'">' ));
+		}
 	}	
 
 	//ある場所にいる攻撃者がさせる場所
@@ -107,17 +112,17 @@ $(function(){
 		
 		//敵の陣地かつ敵のサイコロの数より多いか？
 		var enemyToAttack = new Array();//敵のインデックス
-		//var enemyDices = new Array();
+		var enemyDices = new Array();
 		for(var i=0;i<placeToAttack.length;i++){
 			if((board[placeToAttack[i]].turn != playerIndex)
 				&& (board[placeToAttack[i]].dices < board[attackerIndex].dices)){
 					enemyToAttack.push(placeToAttack[i]);
-					//enemyDices.push(board[i].numberOfDices);
+					enemyDices.push(board[i].numberOfDices);
 			}
 		}
-		return enemyToAttack;
-		//masuData[attackerIndex].canAttackIndexes=enemyToAttack;
-		//masuData[attackerIndex].numOfHarvests=enemyDices;
+		//return enemyToAttack;
+		board[attackerIndex].canAttackIndexes=enemyToAttack;
+		board[attackerIndex].numOfHarvests=enemyDices;
 		//上に対して点数（取り除いたサイコロの数）が最大になるところを先頭にするように並び替え
 	}
 
