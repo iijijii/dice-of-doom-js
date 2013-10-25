@@ -21,6 +21,7 @@ $(function(){
 		//playerIndex = 0;
 		initBoard();
 		drawButton();
+		findPlaceToAttack();
 	}
 
 	function initBoard(){
@@ -43,37 +44,56 @@ $(function(){
 	    	}
     	}
 		document.getElementById("turn").innerHTML="turn : "+player;
-
 	}
 
-	$("#submit").click(function(){		
-		submitClicked();
+	$("#buttons").on("click", function() {
+		var num = $(this).find('.attackPlaceButton').length;
+		var clickedNumber = parseInt($(".attackPlaceButton").attr("id"));
+		var attackerIndex;
+		for(var i=0;i<squareN;i++){
+			for(var j=0;j<board[i].canAttackIndexes.length;j++){
+				if(board[i].canAttackIndexes[j]==clickedNumber){
+					attackerIndex = i;
+					attack(attackerIndex,clickedNumber);
+					findPlaceToAttack();
+					drawButton();
+				}			
+			}
+		}
 	});
-
-	function submitClicked(){
-		findPlaceToAttack();
-	}
 
 	function findPlaceToAttack(){
 		//させるすべての場所
-		var marks = new Array();
+		var marksIndexes = new Array();
 		for(var i = 0;i<squareN; i++){
 			if(board[i].turn == playerIndex){
 				findPlaceForCell(i);//各味方の情報にアタックできる情報を入れる
-				while(board[i].canAttackIndexes[0]!=null){
-					var canAttack = board[i].canAttackIndexes.pop();
-					if($.inArray(canAttack, marks)<0){
-						marks.push(canAttack);
+				for(j=0;j<board[i].canAttackIndexes.length;j++){
+					var canAttackIndex = board[i].canAttackIndexes[j];
+					if($.inArray(canAttackIndex, marksIndexes)<0){
+						marksIndexes.push(canAttackIndex);
 					}
 				}
 			}
 		}
-		document.getElementById("placeToAttack").innerHTML = "canAttackPlace : "+ marks;
-		for(var i=0;i<marks.length;i++){
-			$('#buttons').append(
-		    		$('<input type="button" class="buttons" value="' +marks[i]+'" id="id'+i+'">' ));
-		}
+		marksIndexes.sort(
+			function(a,b){
+	    		if( a < b ) return -1;
+	       	 	if( a > b ) return 1;
+	        	return 0;
+   			}
+		);
+		generateButtons(marksIndexes);	//AIの場合いらない
 	}	
+
+	function generateButtons(marksIndexes){
+		document.getElementById("placeToAttack").innerHTML = "canAttackPlace : "+ marksIndexes;
+		for(var i=0;i<marksIndexes.length;i++){
+			$('#buttons').append(
+		    		$('<input type="button" class="attackPlaceButton" value="' +marksIndexes[i]+'"id="'+marksIndexes[i]+'">' ));
+		}
+	}
+
 
 	//ある場所にいる攻撃者がさせる場所
 	//TODO!Nが増えたとき修正
