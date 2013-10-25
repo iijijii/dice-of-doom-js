@@ -7,6 +7,7 @@ $(function(){
 	var turn = ["A","B"];
 	var playerIndex = 0;
 	var player=turn[playerIndex];
+	var recentPasser　= "passer";
 
 	var masuData = function(turn,dices,canAttackIndexes,numOfHarvests){
 		this.turn=turn;
@@ -46,7 +47,7 @@ $(function(){
 		document.getElementById("turn").innerHTML="turn : "+player;
 	}
 
-	$("#buttons").on("click", function() {
+	$("#buttons").on("click", function() {//TODO　clickedNumber修正,処理を値の取得とその他に分ける
 		var num = $(this).find('.attackPlaceButton').length;
 		var clickedNumber = parseInt($(".attackPlaceButton").attr("id"));
 		var attackerIndex;
@@ -93,6 +94,16 @@ $(function(){
 		    		$('<input type="button" class="attackPlaceButton" value="' +marksIndexes[i]+'"id="'+marksIndexes[i]+'">' ));
 		}
 	}
+
+	$("#passButton").click(function(){
+		if(recentPasser!=player && recentPasser!= "passer") {end();}
+		else{
+			recentPasser = player;
+			supply();
+			changeTurn();
+			drawButton();
+		}
+	});
 
 
 	//ある場所にいる攻撃者がさせる場所
@@ -159,7 +170,27 @@ $(function(){
 
 	function changeTurn(){
 		if(playerIndex == turn.length){playerIndex = 0;}
-		else{playerIndex = playerIndex + 1}
+		else{playerIndex = playerIndex + 1;}
+		player = turn[playerIndex];
+	}
+
+	function end(){//Nが増えたとき修正
+		var numOfPlayerPlaces = new Array(turn.length);
+		var winner;
+		for(var j=0;j<turn.length;j++){
+			numOfPlayerPlaces[j]=0;
+			for(var i=0;i<squareN;i++){
+				if(board[i].turn==j){
+					numOfPlayerPlaces[j]++;
+				}
+			}
+		}
+		if(numOfPlayerPlaces[0]>numOfPlayerPlaces[1]){
+			winner = turn[0];
+		}else{
+			winner = turn[1];
+		}
+		document.getElementById("turn").innerHTML="winner : "+winner;
 	}
 }); 
 
