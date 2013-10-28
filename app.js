@@ -56,11 +56,11 @@ $(function(){
 				if(board[i].canAttackIndexes[j]==clickedNumber){
 					attackerIndex = i;
 					attack(attackerIndex,clickedNumber);
-					findPlaceToAttack();
-					drawButton();
 				}			
 			}
 		}
+		findPlaceToAttack();
+		drawButton();
 	});
 
 	function findPlaceToAttack(){
@@ -88,6 +88,7 @@ $(function(){
 	}	
 
 	function generateButtons(marksIndexes){
+		if($('#buttons').length > 0){$('#buttons').empty();}
 		document.getElementById("placeToAttack").innerHTML = "canAttackPlace : "+ marksIndexes;
 		for(var i=0;i<marksIndexes.length;i++){
 			$('#buttons').append(
@@ -101,6 +102,7 @@ $(function(){
 			recentPasser = player;
 			supply();
 			changeTurn();
+			findPlaceToAttack();
 			drawButton();
 		}
 	});
