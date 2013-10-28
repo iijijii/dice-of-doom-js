@@ -8,6 +8,7 @@ $(function(){
 	var playerIndex = 0;
 	var player=turn[playerIndex];
 	var recentPasser　= "passer";
+	var dicesToSupply=-1;
 
 	var masuData = function(turn,dices,canAttackIndexes,numOfHarvests){
 		this.turn=turn;
@@ -60,13 +61,14 @@ $(function(){
 
 	$("#buttons").on("click", function() {//TODO　clickedNumber修正,処理を値の取得とその他に分ける
 		var num = $(this).find('.attackPlaceButton').length;
-		var clickedNumber = parseInt($(".attackPlaceButton").attr("id"));
+		var clickedNumber = parseInt($(".attackPlaceButton").attr("value"));
 		var attackerIndex;
 		for(var i=0;i<squareN;i++){
 			for(var j=0;j<board[i].canAttackIndexes.length;j++){
 				if(board[i].canAttackIndexes[j]==clickedNumber){
 					attackerIndex = i;
 					attack(attackerIndex,clickedNumber);
+					dicesToSupply+=board[i].numOfHarvests[j];
 				}			
 			}
 		}
@@ -112,6 +114,7 @@ $(function(){
 		else{
 			recentPasser = player;
 			supply();
+			dicesToSupply = -1;
 			changeTurn();
 			findPlaceToAttack();
 			drawButton();
@@ -179,7 +182,17 @@ $(function(){
 
 	/////////////////////////////////////////////////////////////////
 	//補給する。
-	function supply(){}
+	function supply(){
+		var numOfSupply = dicesToSupply;//取り除いたサイコロ-1
+		while(numOfSupply>0){
+			for(var j=0;j<squareN;j++){
+				if((board[j].turn==player)&&(board[j].numberOfDices<maxDices)){
+					board[j].numberOfDices++;
+					numOfSupply--;
+				}
+			}
+		}
+	}
 
 	function changeTurn(){
 		if(playerIndex == turn.length){playerIndex = 0;}
