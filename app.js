@@ -20,7 +20,18 @@ $(function(){
 
 	function start(){
 		//playerIndex = 0;
-		initBoard();
+		var sameFlag = true;
+		do{
+			initBoard();
+			for(var i=0;i<squareN-1;i++){
+				var j=i+1;
+				if(board[i].turn != board[j].turn){
+					sameFlag=false;
+					break;
+				}
+			}
+		}while(sameFlag === true)
+
 		drawButton();
 		findPlaceToAttack();
 	}
